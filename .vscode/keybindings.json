@@ -1,6 +1,0 @@
-[
-    {
-        "key": "ctrl+r",
-        "command": "workbench.action.tasks.build"
-    }
-]
