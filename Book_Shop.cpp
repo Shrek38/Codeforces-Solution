@@ -56,24 +56,7 @@ vector<ll> sieve(ll n) {
 }
 
 void solve() {
-    string s; cin >> s;
-    int t = s.size();
-    int ab = 0, ba = 0;
-    for(int i=1; i<t; i++) {
-        if(s[i]=='a' && s[i-1]=='b') ba++;
-        if(s[i]=='b' && s[i-1]=='a') ab++; 
-    }
-    if(ab==ba) {
-        cout << s << endl;
-        return;
-    }
-    if(ab>ba) {
-        s[0] = 'b';
-    }
-    else if(ab<ba) {
-        s[t-1] = 'b';
-    }
-    cout << s << endl;
+    
 }
 
 int main () {

@@ -56,24 +56,33 @@ vector<ll> sieve(ll n) {
 }
 
 void solve() {
-    string s; cin >> s;
-    int t = s.size();
-    int ab = 0, ba = 0;
-    for(int i=1; i<t; i++) {
-        if(s[i]=='a' && s[i-1]=='b') ba++;
-        if(s[i]=='b' && s[i-1]=='a') ab++; 
+    ll n; cin >> n;
+    vector <ll> v(n);
+    vector<ll> prefix_sum(n+1);
+    for(ll i=0; i<n; i++) {
+        ll x; cin >> x;
+        v[i] = x;
+        prefix_sum[i+1] = prefix_sum[i] + x;
     }
-    if(ab==ba) {
-        cout << s << endl;
-        return;
+    ll val = prefix_sum[n]/2;
+    ll i = lower_bound(prefix_sum.begin(), prefix_sum.end(), val) - prefix_sum.begin();
+    i--;
+    ll st = 0, end = n-1, ans = 0;
+    ll temp1 = 0, temp2 = n-1;
+    ll left = v[0], right = v[n-1];
+    while(st<=i and end>=i and st<end) {
+        if(temp1!=st) left += v[st];
+        if(temp2!=end) right += v[end];
+        temp1 = st, temp2 = end;
+
+        if(left<right) st++;
+        else if(left>right) end--;
+        else {
+            ans = st+1+n-end;
+            st++, end--;
+        }
     }
-    if(ab>ba) {
-        s[0] = 'b';
-    }
-    else if(ab<ba) {
-        s[t-1] = 'b';
-    }
-    cout << s << endl;
+    cout << ans << endl;
 }
 
 int main () {

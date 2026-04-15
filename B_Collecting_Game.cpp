@@ -56,24 +56,33 @@ vector<ll> sieve(ll n) {
 }
 
 void solve() {
-    string s; cin >> s;
-    int t = s.size();
-    int ab = 0, ba = 0;
-    for(int i=1; i<t; i++) {
-        if(s[i]=='a' && s[i-1]=='b') ba++;
-        if(s[i]=='b' && s[i-1]=='a') ab++; 
+    ll n; cin >> n;
+    vector<pair<ll, ll>> v(n);
+    for(ll i=0; i<n; i++) {
+        ll x; cin >> x;
+        v[i] = {x, i};
     }
-    if(ab==ba) {
-        cout << s << endl;
-        return;
+    vector<pair<ll, ll>> v1 = v;
+    sort(v1.begin(), v1.end());
+    vector<ll>prefix_sum(n);
+    prefix_sum[0] = v1[0].first;
+    for(ll i=1; i<n; i++) {
+        prefix_sum[i] = prefix_sum[i-1] + v1[i].first;
     }
-    if(ab>ba) {
-        s[0] = 'b';
+    vector<ll> ans(n);
+    for(ll i=0; i<n-1; i++) {
+        ll j = i;
+        while(prefix_sum[j]>=v1[j+1].first) {
+            ll it = upper_bound(v1.begin(), v1.end(), make_pair(prefix_sum[j], LLONG_MAX))-v1.begin();
+            it--;
+            if(it==j) break;
+            j = it;
+        }
+        ans[v1[i].second] = j;
     }
-    else if(ab<ba) {
-        s[t-1] = 'b';
-    }
-    cout << s << endl;
+    ans[v1[n-1].second] = n-1;
+    for(ll i=0; i<n; i++) cout << ans[i] << " ";
+    cout << endl;
 }
 
 int main () {

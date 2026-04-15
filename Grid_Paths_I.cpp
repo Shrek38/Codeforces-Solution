@@ -55,34 +55,33 @@ vector<ll> sieve(ll n) {
     return primes;
 }
 
+const ll M = 1e9+7;
 void solve() {
-    string s; cin >> s;
-    int t = s.size();
-    int ab = 0, ba = 0;
-    for(int i=1; i<t; i++) {
-        if(s[i]=='a' && s[i-1]=='b') ba++;
-        if(s[i]=='b' && s[i-1]=='a') ab++; 
+    ll n; cin >> n;
+    vector<vector<char>> v(n, vector<char> (n));
+    for(ll i=0; i<n; i++) {
+        for(ll j=0; j<n; j++) {
+            char x; cin >> x;
+            v[i][j] = x;
+        }
     }
-    if(ab==ba) {
-        cout << s << endl;
-        return;
+    vector<vector<ll>> dp(n+1, vector<ll> (n+1));
+    dp[0][0] = (v[0][0]=='*' ? 0 : 1);
+    for(ll i = 0; i<n; i++) {
+        for(ll j=0; j<n; j++) {
+            if((i==0 && j==0) || v[i][j]=='*') continue;
+            if(i==0) dp[i][j] = (v[i][j-1]=='*' ? 0 : (dp[i][j-1]) % M );
+            else if(j==0) dp[i][j] = (v[i-1][j]=='*' ? 0 : (dp[i-1][j]) % M );
+            else dp[i][j] = ((v[i][j-1]=='*' ? 0 : dp[i][j-1]) + (v[i-1][j]=='*' ? 0 : dp[i-1][j])) % M;
+        }
     }
-    if(ab>ba) {
-        s[0] = 'b';
-    }
-    else if(ab<ba) {
-        s[t-1] = 'b';
-    }
-    cout << s << endl;
+    cout << dp[n-1][n-1] % M << endl;
 }
 
 int main () {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    ll t; cin >> t;
-    while(t--) {
-        solve();
-    }
+    solve();
     return 0;
 }
